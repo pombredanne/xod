@@ -71,7 +71,8 @@ export const saveArrangedFiles = R.curry((pathToWorkspace, data) => {
 
 // :: Path -> Project -> Promise Project Error
 export const saveProjectEntirely = R.curry(
-  (workspacePath, project) => Promise.resolve(project)
+  (distPath, project) => Promise.resolve(project)
+    // .then(R.tap(a => console.dir(a, { depth: 2, colors: true })))
     .then(arrangeByFiles)
     .then(R.map(R.cond([
       [
@@ -84,7 +85,7 @@ export const saveProjectEntirely = R.curry(
       ],
       [R.T, R.identity],
     ])))
-    .then(saveArrangedFiles(workspacePath))
+    .then(saveArrangedFiles(distPath))
     .then(R.always(project))
     .catch(rejectWithCode(ERROR_CODES.CANT_SAVE_PROJECT))
 );
